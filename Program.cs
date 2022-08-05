@@ -10,12 +10,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
 
 builder.Services.AddDbContext<Context>(options => options.UseMySql(
-    "server=localhost;initial catalog=PROVA_WEB;uid=root;pws=Oliver1902",
+    "server=localhost;initial catalog=PROVA_WEB;uid=root;pwd=Oliver1902",
     Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.25-mysql")
     ));
+var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
