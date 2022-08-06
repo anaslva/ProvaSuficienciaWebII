@@ -13,21 +13,21 @@ namespace ProvaSuficienciaWebII.Extensions
             var secret = configuration["JWT:Key"];
             var key = Encoding.UTF8.GetBytes(configuration["JWT:Key"]);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-
-            .AddJwtBearer(x =>
-            {
-
-                x.TokenValidationParameters = new TokenValidationParameters
+                .AddJwtBearer(options =>
                 {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero
+                    var secret = configuration["JWT:Key"];
+                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
 
-                };
-            });
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = key,
+                        ClockSkew = TimeSpan.Zero
+                    };
+                });
 
             return services;
         }

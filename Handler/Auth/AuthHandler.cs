@@ -19,11 +19,9 @@ namespace ProvaSuficienciaWebII.Handler.Auth
 
             var secret = _configuration["JWT:Key"];
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
-            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
             var token = new JwtSecurityToken(
-                issuer: null,
-                audience: null,
                 claims: null,
                 expires: dataExpiracao,
                 signingCredentials: credentials);

@@ -1,11 +1,13 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ProvaSuficienciaWebII.DAO;
 using ProvaSuficienciaWebII.Data.Context;
 using ProvaSuficienciaWebII.Extensions;
 using ProvaSuficienciaWebII.Handler;
 using ProvaSuficienciaWebII.Handler.Auth;
-
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +25,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "JWT Authorization header using the Bearer scheme",
+        Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer [yourToken]\"",
         In = ParameterLocation.Header,
         Name = "Authorization",
         Scheme = "Bearer",
@@ -40,11 +42,8 @@ builder.Services.AddSwaggerGen(options =>
                                 Type = ReferenceType.SecurityScheme,
                                 Id = "Bearer"
                             },
-                            Scheme = "default",
-                            Name = "Bearer",
-                            In = ParameterLocation.Header,
                         },
-                        new List<string>()
+                         new string[] {}
                     }
                 });
 
@@ -56,7 +55,24 @@ builder.Services.AddDbContext<Context>(options => options.UseMySql(
     Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.25-mysql")
     ));
 
-builder.Services.AddAuthenticationConfiguration(builder.Configuration);
+builder.Services.AddAuthentication(options => {
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+        // Adding Jwt Bearer
+        .AddJwtBearer(options => {
+            options.SaveToken = true;
+            options.RequireHttpsMetadata = false;
+            options.TokenValidationParameters = new TokenValidationParameters()
+            {
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
+            };
+        });
 
 var app = builder.Build();
 
