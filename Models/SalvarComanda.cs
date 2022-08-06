@@ -1,6 +1,6 @@
 ﻿namespace ProvaSuficienciaWebII.Models
 {
-    public class Comanda
+    public class SalvarComanda
     {
         public int Id { get; set; }
         public int IdUsuario { get; set; }
