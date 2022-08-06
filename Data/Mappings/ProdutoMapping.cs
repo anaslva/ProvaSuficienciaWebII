@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ProvaSuficienciaWebII.Models;
+using ProvaSuficienciaWebII.Entities;
 
 namespace ProvaSuficienciaWebII.Data.Mappings
 {
@@ -15,12 +15,8 @@ namespace ProvaSuficienciaWebII.Data.Mappings
 
             builder.Property(x => x.Preco);
 
-            builder.Property(x => x.ComandaId);
+            builder.Property(x => x.IdComanda);
 
-            // FK
-            builder.HasOne(x => x.Comanda)
-                   .WithMany(x => x.Produtos)
-                   .HasForeignKey(x => x.ComandaId);
         }
     }
 }

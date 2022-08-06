@@ -1,11 +1,13 @@
 ﻿using ProvaSuficienciaWebII.Models;
+using ProvaSuficienciaWebII.Views.Comandas;
 
 namespace ProvaSuficienciaWebII.Repositories
 {
     public interface IComandasRepository
     {
 
-        Task<IEnumerable<Comanda>> GetAllAsync();
-        Task<Comanda?> GetByIdAsync(int id);
+        Task<List<ListarComandaViewModel>> Listar();
+        Task<ObterComandaViewModel> ObterPorId(int id);
+        Task<SalvarComandaViewModel> SalvarComanda(Comanda comanda);
     }
 }

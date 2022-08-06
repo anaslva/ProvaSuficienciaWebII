@@ -1,11 +1,14 @@
-﻿namespace ProvaSuficienciaWebII.Models
+﻿namespace ProvaSuficienciaWebII.Views.Comandas
 {
-    public class Comanda
+    public class ListarComandaViewModel
     {
-        public int Id { get; set; }
+
         public int IdUsuario { get; set; }
+
         public string NomeUsuario { get; set; }
+
         public string TelefoneUsuario { get; set; }
-        public List<Produto> Produtos { get; set; }
+
+
     }
 }

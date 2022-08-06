@@ -24,6 +24,17 @@ namespace ProvaSuficienciaWebII.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("IdUsuario")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NomeUsuario")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("TelefoneUsuario")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
                     b.ToTable("Comandas");
@@ -35,7 +46,7 @@ namespace ProvaSuficienciaWebII.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("ComandaId")
+                    b.Property<int>("IdComanda")
                         .HasColumnType("int");
 
                     b.Property<string>("Nome")
@@ -47,36 +58,20 @@ namespace ProvaSuficienciaWebII.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ComandaId");
+                    b.HasIndex("IdComanda");
 
                     b.ToTable("Produtos");
                 });
 
-            modelBuilder.Entity("ProvaSuficienciaWebII.Models.Usuario", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("NomeUsuario")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TelefoneUsuario")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Usuarios");
-                });
-
             modelBuilder.Entity("ProvaSuficienciaWebII.Models.Produto", b =>
                 {
-                    b.HasOne("ProvaSuficienciaWebII.Models.Comanda", null)
+                    b.HasOne("ProvaSuficienciaWebII.Models.Comanda", "Comanda")
                         .WithMany("Produtos")
-                        .HasForeignKey("ComandaId")
+                        .HasForeignKey("IdComanda")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Comanda");
                 });
 
             modelBuilder.Entity("ProvaSuficienciaWebII.Models.Comanda", b =>

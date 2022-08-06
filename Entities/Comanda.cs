@@ -1,4 +1,4 @@
-﻿namespace ProvaSuficienciaWebII.Models
+﻿namespace ProvaSuficienciaWebII.Entities
 {
     public class Comanda
     {

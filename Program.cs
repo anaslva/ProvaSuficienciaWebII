@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ProvaSuficienciaWebII.DAO;
 using ProvaSuficienciaWebII.Data.Context;
 using ProvaSuficienciaWebII.Repositories;
 
@@ -6,8 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddScoped<IComandaDAO, ComandaDAO>();
 builder.Services.AddScoped<IComandasRepository, ComandaRepository>();
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
