@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using ProvaSuficienciaWebII.Data.Context;
 using ProvaSuficienciaWebII.Handler;
 using ProvaSuficienciaWebII.Models;
 using ProvaSuficienciaWebII.Views.Comandas;
@@ -14,7 +7,7 @@ using ProvaSuficienciaWebII.Views.Comandas;
 namespace ProvaSuficienciaWebII.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("RestAPIFurb/[controller]")]
 
     [Authorize]
     public class ComandasController : ControllerBase
@@ -27,16 +20,16 @@ namespace ProvaSuficienciaWebII.Controllers
         }
 
         [HttpGet]
-        public Task<List<ListarComandaViewModel>> Listar()
+        public async Task<ActionResult<List<ListarComandaViewModel>>> Listar()
         {
-            var comandas =  _handler.Listar();
+            var comandas =  await _handler.Listar();
 
-            return comandas;
+            return Ok(comandas);
 
         }
 
         [HttpGet("{id}")]
-        public async Task<ObterComandaViewModel> GetByIdAsync(int id)
+        public async Task<ActionResult<ObterComandaViewModel>> GetByIdAsync(int id)
         {
             var comanda = await _handler.ObterPorId(id);
             return comanda;
@@ -44,24 +37,40 @@ namespace ProvaSuficienciaWebII.Controllers
         }
 
         [HttpPost]
-        public Task<SalvarComandaViewModel> CadastrarComanda([FromBody] SalvarComanda comanda)
+        public async Task<ActionResult<SalvarComandaViewModel>> CadastrarComanda([FromBody] SalvarComanda comanda)
         {
-            return _handler.SalvarComanda(comanda);
+            if(comanda.EhValido() != null)
+            {
+                return BadRequest (comanda.EhValido());
+            }
+
+            return Ok(await _handler.SalvarComanda(comanda));
+           
         }
 
         [HttpPut]
         [Route("{id}")]
-        public Task AtualizarComanda([FromRoute] int id, [FromBody] AtualizarComanda comanda)
+        public async Task<ActionResult> AtualizarComanda([FromRoute] int id, [FromBody] AtualizarComanda comanda)
         {
             comanda.Id = id;
-            return _handler.AtualizarComanda(comanda);
+
+            if(comanda.EhValido() != null)
+            {
+                return BadRequest(comanda.EhValido());
+            } 
+            await _handler.AtualizarComanda(comanda);
+            return Ok();
         }
 
         [HttpDelete]
         [Route("{id}")]
-        public Task<DeletarComandaViewModel> RemoverComanda([FromRoute] int id)
+        public async Task<ActionResult<DeletarComandaViewModel>> RemoverComanda([FromRoute] int id)
         {
-            return _handler.DeletarComanda(id);
+            if(id <= 0)
+            {
+                return BadRequest(new Models.Exceptions.Exception("Id", "Id deve ser maior que 0."));
+            }
+            return Ok(await _handler.DeletarComanda(id));
         }
     }
 }

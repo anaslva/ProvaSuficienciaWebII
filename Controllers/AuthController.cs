@@ -6,7 +6,7 @@ using ProvaSuficienciaWebII.Models.Auth;
 namespace ProvaSuficienciaWebII.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("RestAPIFurb/[controller]")]
 
     [AllowAnonymous]
     public class AuthController : ControllerBase

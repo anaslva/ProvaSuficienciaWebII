@@ -17,7 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped <IAuthHandler, AuthHandler>();
 builder.Services.AddScoped<IComandaDAO, ComandaDAO>();
 builder.Services.AddScoped<IComandasHandler, ComandaHandler>();
-builder.Services.AddControllers();
+builder.Services.AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
